@@ -1,10 +1,12 @@
 package com.example.repository;
 
 import com.example.model.Product;
-
+import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.UUID;
 
+@Repository
+@SuppressWarnings("rawtypes")
 public class ProductRepository extends MainRepository<Product> {
 
     private static final String DATA_PATH = "src/main/java/com/example/data/products.json";
