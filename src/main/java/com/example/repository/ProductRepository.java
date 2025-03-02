@@ -46,11 +46,12 @@ public class ProductRepository extends MainRepository<Product> {
         return product;
     }
 
-    public Product updateProduct(Product product) {
+    public Product updateProduct(UUID productId, String newName, double newPrice) {
         ArrayList<Product> products = this.getProducts();
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getId().equals(product.getId())) {
-                products.set(i, product);
+        for (Product product : products) {
+            if (product.getId().equals(productId)) {
+                product.setName(newName);
+                product.setPrice(newPrice);
                 this.saveAll(products);
                 return product;
             }
@@ -58,7 +59,7 @@ public class ProductRepository extends MainRepository<Product> {
         return null;
     }
 
-    public void deleteProduct(UUID productId) {
+    public void deleteProductById(UUID productId) {
         ArrayList<Product> products = this.getProducts();
         for (int i = 0; i < products.size(); i++) {
             if (products.get(i).getId().equals(productId)) {
@@ -78,6 +79,5 @@ public class ProductRepository extends MainRepository<Product> {
         }
         this.saveAll(products);
     }
-
 
 }
