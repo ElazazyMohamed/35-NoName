@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.model.Cart;
+import com.example.model.Order;
 import com.example.model.Product;
 import com.example.repository.CartRepository;
 import org.springframework.stereotype.Service;
@@ -47,4 +48,17 @@ public class CartService extends MainService<Cart> {
         cartRepository.deleteCartById(cartId);
     }
 
+    public Order checkoutCart(UUID userId){
+        Cart cart = cartRepository.getCartById(userId);
+        if (cart == null || cart.getProducts().isEmpty()) {
+            throw new IllegalStateException('Cart is Empty. Cannot create new order');
+        }
+        Order order = new Order(
+                UUID.randomUUID(),
+                userId,
+                cart.getProducts().stream().mapToDouble(Product::getPrice).sum()
+        );
+        order.setProducts(cart.getProducts());
+        return order;
+    }
 }
