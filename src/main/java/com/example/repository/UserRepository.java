@@ -44,9 +44,7 @@ public class UserRepository extends MainRepository<User> {
     }
 
     public User addUser(User user) {
-        ArrayList<User> users = this.getUsers();
-        users.add(user);
-        this.saveAll(users);
+        this.save(user);
         return user;
     }
 
@@ -59,23 +57,29 @@ public class UserRepository extends MainRepository<User> {
     }
 
     public void addOrderToUser(UUID userId, Order order) {
-        User user = this.getUserById(userId);
-        if (user != null) {
-            List<Order> orders = user.getOrders();
-            orders.add(order);
-            user.setOrders(orders);
-            this.save(user);
+        ArrayList<User> users = this.getUsers();
+        for (User user : users) {
+            if (user.getId().equals(userId)) {
+                List<Order> orders = user.getOrders();
+                orders.add(order);
+                user.setOrders(orders);
+                break;
+            }
         }
+        this.saveAll(users);
     }
 
     public void removeOrderFromUser(UUID userId, UUID orderId) {
-        User user = this.getUserById(userId);
-        if (user != null) {
-            List<Order> orders = user.getOrders();
-            orders.removeIf(order -> order.getId().equals(orderId));
-            user.setOrders(orders);
-            this.save(user);
+        ArrayList<User> users = this.getUsers();
+        for (User user : users) {
+            if (user.getId().equals(userId)) {
+                List<Order> orders = user.getOrders();
+                orders.removeIf(order -> order.getId().equals(orderId));
+                user.setOrders(orders);
+                break;
+            }
         }
+        this.saveAll(users);
     }
 
     public void deleteUserById(UUID userId){
