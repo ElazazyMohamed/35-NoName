@@ -69,9 +69,19 @@ public class UserController {
     }
     @PutMapping("/addProductToCart")
     public String addProductToCart(@RequestParam UUID userId, @RequestParam UUID productId){
-        this.userService.addOrderToUser(userId);
-
-        return "added product succefully";
+        Cart cart = cartService.getCartByUserId(userId);
+        // If none exists, create a new one
+        if (cart == null) {
+            cart = new Cart(UUID.randomUUID(), userId, new ArrayList<>());
+            cartService.addCart(cart);
+        }
+        // Get product using product service
+        Product product = productService.getProductById(productId);
+        if (product != null) {
+            cart.getProducts().add(product);
+            cartService.addCart(cart);
+        }
+        return "Product added to cart";
     }
 
     @PutMapping("/deleteProductFromCart")
