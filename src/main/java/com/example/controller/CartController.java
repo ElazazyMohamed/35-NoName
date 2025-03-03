@@ -41,13 +41,16 @@ public class CartController {
     }
     @PutMapping("/deleteProduct/{cartId}")
     public String deleteProductFromCart(@PathVariable UUID cartId, @RequestBody Product product) {
+
         cartService.deleteProductFromCart(cartId, product);
-        return "Product removed from cart successfully.";
+        return "Product deleted from cart successfully";
     }
     @DeleteMapping("/delete/{cartId}")
     public String deleteCartById(@PathVariable UUID cartId) {
         cartService.deleteCartById(cartId);
-        return "Cart deleted successfully.";
+        return "Cart deleted successfully";
+
+
     }
 
 }

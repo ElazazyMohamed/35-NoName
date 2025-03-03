@@ -1,68 +1,88 @@
 package com.example.controller;
 
+import com.example.model.Cart;
+import com.example.model.Order;
 import com.example.model.User;
+import com.example.service.CartService;
 import com.example.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
+    private final CartService cartService;
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService, CartService cartService) {
         this.userService = userService;
+        this.cartService = cartService;
     }
 
     @PostMapping("/")
     public User addUser(@RequestBody User user){
-        this.userService.addUser(user);
+        return userService.addUser(user);
     }
 
-    @GetMappping("/")
+    @GetMapping("/")
     public ArrayList<User> getUsers(){
-        this.userService.getUsers();
+        return userService.getUsers();
     }
 
     @GetMapping("/{userId}")
     public User getUserById(@PathVariable UUID userId){
-        this.userService.getUserById(userId);
+        return userService.getUserById(userId);
     }
 
     @GetMapping("/{userId}/orders")
     public List<Order> getOrderByUserId(@PathVariable UUID userId){
-        this.userService.getOrderByUserId(userId);
+        return userService.getOrderByUserId(userId);
     }
 
     @PostMapping("/{userId}/checkout")
     public String addOrderToUser(@PathVariable UUID userId){
         this.userService.addOrderToUser(userId);
+        return "success";
     }
 
     @PostMapping("/{userId}/removeOrder")
     public String removeOrderFromUser(@PathVariable UUID userId, @RequestParam UUID orderId){
-        this.userService.removeOrderFromUer(userId, orderId);
+        this.userService.removeOrderFromUser(userId, orderId);
+        return "Order removed successfully";
     }
 
     @DeleteMapping("/{userId}/emptyCart")
     public String emptyCart(@PathVariable UUID userId){
         this.userService.emptyCart(userId);
+        return "Cart emptied successfully";
     }
     @PutMapping("/addProductToCart")
     public String addProductToCart(@RequestParam UUID userId, @RequestParam UUID productId){
         this.userService.addOrderToUser(userId);
+
+        return "added product succefully";
     }
 
     @PutMapping("/deleteProductFromCart")
     public String deleteProductFromCart(@RequestParam UUID userId, @RequestParam UUID productId){
-        this.userService.();
+        Cart cart = this.cartService.getCartByUserId(userId);
+
+        this.cartService.deleteCartById(cart.getId());
+
+        return "Product deleted from cart";
     }
 
     @DeleteMapping("/delete/{UserId}")
     public String deleteUserById(@PathVariable UUID userId){
-        this.userService.deleteUserByUserId(userId);
+        this.userService.deleteUserById(userId);
+
+        return "deleted user";
     }
 }

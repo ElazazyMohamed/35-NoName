@@ -71,10 +71,12 @@ public class ProductRepository extends MainRepository<Product> {
     }
 
     public void applyDiscount(double discount, ArrayList<UUID> productIds) {
+
+        double discountPercentage = discount / 100;
         ArrayList<Product> products = this.getProducts();
         for (Product product : products) {
             if (productIds.contains(product.getId())) {
-                product.setPrice(product.getPrice() * (1 - discount));
+                product.setPrice(product.getPrice() - (product.getPrice() * discountPercentage));
             }
         }
         this.saveAll(products);

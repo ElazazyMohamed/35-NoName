@@ -51,13 +51,13 @@ public class ProductController {
             productIds) {
         productService.applyDiscount(discount, productIds);
 
-        return "Discount Applied on Products";
+        return "Discount applied successfully";
     }
 
     @DeleteMapping("/delete/{productId}")
     public String deleteProductById(@PathVariable UUID productId) {
         productService.deleteProductById(productId);
-        return "Product Deleted";
+        return "Product deleted successfully";
     }
 
 
