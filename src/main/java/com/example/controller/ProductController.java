@@ -46,8 +46,8 @@ public class ProductController {
     // java
     public Product updateProduct(@PathVariable UUID productId, @RequestBody Map<String, Object> body) {
         // Retrieve name and price from the request body
-        String name = (String) body.get("name");
-        Object priceObj = body.get("price");
+        String name = (String) body.get("newName");
+        Object priceObj = body.get("newPrice");
 
         // Check if name or price is missing
         if (name == null || priceObj == null) {
