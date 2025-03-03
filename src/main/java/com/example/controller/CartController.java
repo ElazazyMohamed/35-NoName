@@ -3,6 +3,8 @@ package com.example.controller;
 import com.example.model.Cart;
 import com.example.model.Product;
 import com.example.service.CartService;
+import com.example.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -12,10 +14,13 @@ import java.util.UUID;
 @RequestMapping("/cart")
 
 public class CartController {
-    private final CartService cartService ;
+    private final CartService cartService;
+    private final ProductService productService;
 
-    public CartController(CartService cartService) {
+    @Autowired
+    public CartController(CartService cartService, ProductService productService) {
         this.cartService = cartService;
+        this.productService = productService;
     }
     @PostMapping("/")
     public Cart addCart(@RequestBody Cart cart){
@@ -39,10 +44,17 @@ public class CartController {
         cartService.addProductToCart(cartId, product);
         return "Product added to cart successfully.";
     }
-    @PutMapping("/deleteProduct/{cartId}")
-    public String deleteProductFromCart(@PathVariable UUID cartId, @RequestBody Product product) {
+    @PutMapping("/deleteProductFromCart")
+    public String deleteProductFromCart(@RequestParam UUID userId, @RequestParam UUID productId) {
 
-        cartService.deleteProductFromCart(cartId, product);
+        Cart cart = cartService.getCartByUserId(userId);
+        if (cart == null) {
+            return "Cart is empty";
+        }
+        Product product = productService.getProductById(productId);
+        if (product != null) {
+            cartService.deleteProductFromCart(cart.getId(), product);
+        }
         return "Product deleted from cart successfully";
     }
     @DeleteMapping("/delete/{cartId}")

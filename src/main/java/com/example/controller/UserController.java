@@ -2,8 +2,10 @@ package com.example.controller;
 
 import com.example.model.Cart;
 import com.example.model.Order;
+import com.example.model.Product;
 import com.example.model.User;
 import com.example.service.CartService;
+import com.example.service.ProductService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +21,13 @@ public class UserController {
 
     private final UserService userService;
     private final CartService cartService;
+    private final ProductService productService;
 
     @Autowired
-    public UserController(UserService userService, CartService cartService) {
+    public UserController(UserService userService, CartService cartService, ProductService productService) {
         this.userService = userService;
         this.cartService = cartService;
+        this.productService = productService;
     }
 
     @PostMapping("/")
@@ -72,10 +76,14 @@ public class UserController {
 
     @PutMapping("/deleteProductFromCart")
     public String deleteProductFromCart(@RequestParam UUID userId, @RequestParam UUID productId){
-        Cart cart = this.cartService.getCartByUserId(userId);
-
-        this.cartService.deleteCartById(cart.getId());
-
+        Cart cart = cartService.getCartByUserId(userId);
+        if (cart == null) {
+            return "Cart is empty";
+        }
+        Product product = productService.getProductById(productId);
+        if (product != null) {
+            cartService.deleteProductFromCart(cart.getId(), product);
+        }
         return "Product deleted from cart";
     }
 
