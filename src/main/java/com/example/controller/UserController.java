@@ -79,10 +79,14 @@ public class UserController {
         return "Product deleted from cart";
     }
 
-    @DeleteMapping("/delete/{UserId}")
+    @DeleteMapping("/delete/{userId}")
     public String deleteUserById(@PathVariable UUID userId){
+
+        if (this.userService.getUserById(userId) == null) {
+            return "User not found";
+        }
         this.userService.deleteUserById(userId);
 
-        return "deleted user";
+        return "User deleted successfully";
     }
 }
