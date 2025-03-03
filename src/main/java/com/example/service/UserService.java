@@ -32,7 +32,7 @@ public class UserService extends MainService<User> {
     public User getUserById(UUID userId) {
         return this.userRepository.getUserById(userId);
     }
-    public List<Order> getOrderByUserID(UUID userId) {
+    public List<Order> getOrderByUserId(UUID userId) {
         return this.userRepository.getOrdersByUserId(userId);
     }
 
