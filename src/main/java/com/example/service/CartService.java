@@ -49,7 +49,7 @@ public class CartService extends MainService<Cart> {
     }
 
     public Order checkoutCart(UUID userId){
-        Cart cart = cartRepository.getCartById(userId);
+        Cart cart = cartRepository.getCartByUserId(userId);
         if (cart == null || cart.getProducts().isEmpty()) {
             throw new IllegalStateException("Cart is Empty. Cannot create new order");
         }

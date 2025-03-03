@@ -49,7 +49,7 @@ public class UserController {
     @PostMapping("/{userId}/checkout")
     public String addOrderToUser(@PathVariable UUID userId){
         this.userService.addOrderToUser(userId);
-        return "success";
+        return "Order added successfully";
     }
 
     @PostMapping("/{userId}/removeOrder")
