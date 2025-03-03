@@ -47,18 +47,4 @@ public class CartService extends MainService<Cart> {
     public void deleteCartById(UUID cartId) {
         cartRepository.deleteCartById(cartId);
     }
-
-    public Order checkoutCart(UUID userId){
-        Cart cart = cartRepository.getCartById(userId);
-        if (cart == null || cart.getProducts().isEmpty()) {
-            throw new IllegalStateException('Cart is Empty. Cannot create new order');
-        }
-        Order order = new Order(
-                UUID.randomUUID(),
-                userId,
-                cart.getProducts().stream().mapToDouble(Product::getPrice).sum()
-        );
-        order.setProducts(cart.getProducts());
-        return order;
-    }
 }
