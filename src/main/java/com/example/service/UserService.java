@@ -43,10 +43,10 @@ public class UserService extends MainService<User> {
     public void emptyCart(UUID userId){
         this.cartService.deleteCartById(userId);
     }
-    public void removeOrderFromUer(UUID userId, UUID orderId) {
+    public void removeOrderFromUser(UUID userId, UUID orderId) {
         this.userRepository.removeOrderFromUser(userId, orderId);
     }
-    public void deleteUserByUserId(UUID userId) {
+    public void deleteUserById(UUID userId) {
         this.userRepository.deleteUserById(userId);
     }
 }

@@ -27,6 +27,8 @@ public class ProductController {
 
     @PostMapping("/")
     public Product addProduct(@RequestBody Product product) {
+
+
         return productService.addProduct(product);
     }
 
@@ -41,9 +43,26 @@ public class ProductController {
     }
 
     @PutMapping("/update/{productId}")
-    public Product updateProduct(@PathVariable UUID productId, @RequestBody Map<String,Object>
-            body) {
-        return productService.updateProduct(productId, (String) body.get("name"), (double) body.get("price"));
+    // java
+    public Product updateProduct(@PathVariable UUID productId, @RequestBody Map<String, Object> body) {
+        // Retrieve name and price from the request body
+        String name = (String) body.get("newName");
+        Object priceObj = body.get("newPrice");
+
+        // Check if name or price is missing
+        if (name == null || priceObj == null) {
+            throw new IllegalArgumentException("Missing 'name' or 'price' in the request body");
+        }
+
+        // Convert priceObj to a double. This handles cases where priceObj might be an instance of Number.
+        double price;
+        if (priceObj instanceof Number) {
+            price = ((Number) priceObj).doubleValue();
+        } else {
+            throw new IllegalArgumentException("'price' value is not a valid number");
+        }
+
+        return productService.updateProduct(productId, name, price);
     }
 
     @PutMapping("/applyDiscount")
@@ -51,14 +70,16 @@ public class ProductController {
             productIds) {
         productService.applyDiscount(discount, productIds);
 
-        return "Discount Applied on Products";
+        return "Discount applied successfully";
     }
 
     @DeleteMapping("/delete/{productId}")
     public String deleteProductById(@PathVariable UUID productId) {
         productService.deleteProductById(productId);
-        return "Product Deleted";
+        return "Product deleted successfully";
     }
+
+
 
 
 }

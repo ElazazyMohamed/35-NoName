@@ -35,13 +35,14 @@ public class OrderController {
 
     @DeleteMapping("/delete/{orderId}")
     public String deleteOrderById(@PathVariable UUID orderId){
-        try {
-            orderService.deleteOrderById(orderId);
-            return "Order Deleted Successfully";
-        }catch (IllegalArgumentException e){
-            return "Order Not Found";
+        Order order = orderService.getOrderById(orderId);
+        if (order == null) {
+            return "Order not found";
         }
+        orderService.deleteOrderById(orderId);
+        return "Order deleted successfully";
     }
+
 
 
 }

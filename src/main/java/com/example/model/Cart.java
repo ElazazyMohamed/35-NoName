@@ -23,6 +23,12 @@ public class Cart {
         this.userId = userId;
     }
 
+    public Cart(UUID id, UUID userId, List<Product> products) {
+        this.id = id;
+        this.userId = userId;
+        this.products = products;
+    }
+
     public UUID getId() {
         return id;
     }
