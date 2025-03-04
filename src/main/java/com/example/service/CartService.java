@@ -30,13 +30,23 @@ public class CartService extends MainService<Cart> {
     public Cart getCartByUserId(UUID userId) {
         return cartRepository.getCartByUserId(userId);
     }
-    public void addProductToCart(UUID cartId, Product product) {
-        Cart cart = cartRepository.getCartById(cartId);
-        if (cart != null) {
-            cart.getProducts().add(product);
-            cartRepository.addCart(cart); // Save the updated cart
-        }
+//    public void addProductToCart(UUID cartId, Product product) {
+//        Cart cart = cartRepository.getCartById(cartId);
+//        if (cart != null) {
+//            cart.getProducts().add(product);
+//            cartRepository.addCart(cart); // Save the updated cart
+//        }
+//    }
+public void addProductToCart(UUID cartId, Product product) {
+    Cart cart = cartRepository.getCartById(cartId);
+    if (cart != null) {
+        cart.getProducts().add(product);
+        cartRepository.addCart(cart); // Save the updated cart
+    } else {
+        throw new IllegalArgumentException("Cart not found");
     }
+}
+
     public void deleteProductFromCart(UUID cartId, Product product) {
         Cart cart = cartRepository.getCartById(cartId);
         if (cart != null) {
