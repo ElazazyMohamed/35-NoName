@@ -2,9 +2,12 @@ package com.example.controller;
 
 import com.example.model.Cart;
 import com.example.model.Product;
+import com.example.repository.CartRepository;
 import com.example.service.CartService;
 import com.example.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,10 +25,16 @@ public class CartController {
         this.cartService = cartService;
         this.productService = productService;
     }
-    @PostMapping("/")
-    public Cart addCart(@RequestBody Cart cart){
-        return cartService.addCart(cart);
+
+@PostMapping("/")
+public ResponseEntity<?> addCart(@RequestBody Cart cart) {
+    if (cart.getUserId() == null) {
+        return ResponseEntity.badRequest().body("User ID is required");
     }
+    Cart newCart = cartService.addCart(cart);
+    return ResponseEntity.ok(newCart);
+}
+
     @GetMapping("/")
     public ArrayList<Cart> getCarts(){
         return cartService.getCarts();
@@ -39,11 +48,24 @@ public class CartController {
         return cartService.getCartByUserId(userId);
     }
 
-    @PutMapping("/addProduct/{cartId}")
-    public String addProductToCart(@PathVariable UUID cartId, @RequestBody Product product) {
-        cartService.addProductToCart(cartId, product);
-        return "Product added to cart successfully.";
+//    @PutMapping("/addProduct/{cartId}")
+//    public String addProductToCart(@PathVariable UUID cartId, @RequestBody Product product) {
+//       cartService.addProductToCart(cartId, product);
+//       return "Product added to cart successfully.";
+//   }
+@PutMapping("/addProduct/{cartId}")
+public ResponseEntity<?> addProductToCart(@PathVariable UUID cartId, @RequestBody Product product) {
+    Cart cart = cartService.getCartById(cartId);
+    if (cart == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cart not found");
     }
+
+    cartService.addProductToCart(cartId, product);
+    return ResponseEntity.ok("Product added to cart successfully.");
+}
+
+
+
     @PutMapping("/deleteProductFromCart")
     public String deleteProductFromCart(@RequestParam UUID userId, @RequestParam UUID productId) {
 
