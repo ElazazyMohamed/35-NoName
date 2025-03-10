@@ -23,7 +23,7 @@ public class OrderController {
 
     @PostMapping("/")
     public void addOrder(@RequestBody Order order) {
-        // ✅ Manual validation for empty request
+        //  Manual validation for empty request
         if (order == null || (order.getId() == null && order.getUserId() == null)) {
             throw new IllegalArgumentException("Invalid request: Order ID and User ID cannot be empty.");
         }

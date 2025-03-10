@@ -8,6 +8,7 @@ import com.example.service.CartService;
 import com.example.service.ProductService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -32,6 +33,9 @@ public class UserController {
 
     @PostMapping("/")
     public User addUser(@RequestBody User user){
+        if (user == null || (user.getId() == null && user.getName() == null )) {
+            throw new IllegalArgumentException("Invalid request: User ID and Name cannot be empty.");
+        }
         return userService.addUser(user);
     }
 
@@ -42,7 +46,11 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public User getUserById(@PathVariable UUID userId){
-        return userService.getUserById(userId);
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with ID: " + userId);
+        }
+        return user;
     }
 
     @GetMapping("/{userId}/orders")
@@ -106,5 +114,14 @@ public class UserController {
         this.userService.deleteUserById(userId);
 
         return "User deleted successfully";
+    }
+
+
+    // Exception Handler to return 400 Bad Request with the error message
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public String handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ex.getMessage(); // Return error message in response body
     }
 }
