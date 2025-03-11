@@ -1,8 +1,10 @@
 package com.example.repository;
 
+import com.example.exception.DatabaseException;
 import com.example.model.Order;
 import com.example.model.Product;
 import com.example.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.UUID;
 @Repository
 @SuppressWarnings("rawtypes")
 public class UserRepository extends MainRepository<User> {
-
+    @Value("${spring.data.SPRING_DATA_USER}")
     private static final String DATA_PATH = "src/main/java/com/example/data/users.json";
 
     public UserRepository() {
