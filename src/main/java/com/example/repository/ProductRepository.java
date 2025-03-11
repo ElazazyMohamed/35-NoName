@@ -1,6 +1,7 @@
 package com.example.repository;
 
 import com.example.model.Product;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -8,7 +9,7 @@ import java.util.UUID;
 @Repository
 @SuppressWarnings("rawtypes")
 public class ProductRepository extends MainRepository<Product> {
-
+    @Value("${spring.data.SPRING_DATA_PRODUCT}")
     private static final String DATA_PATH = "src/main/java/com/example/data/products.json";
 
     public ProductRepository() {

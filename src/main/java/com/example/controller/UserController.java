@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.exception.ResourceNotFoundException;
 import com.example.model.Cart;
 import com.example.model.Order;
 import com.example.model.Product;
@@ -8,6 +9,7 @@ import com.example.service.CartService;
 import com.example.service.ProductService;
 import com.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -99,12 +101,16 @@ public class UserController {
 
     @DeleteMapping("/delete/{userId}")
     public String deleteUserById(@PathVariable UUID userId){
-
-        if (this.userService.getUserById(userId) == null) {
+        try {
+            this.userService.getUserById(userId);
+        } catch (ResourceNotFoundException e) {
             return "User not found";
         }
-        this.userService.deleteUserById(userId);
-
-        return "User deleted successfully";
+        try {
+            this.userService.deleteUserById(userId);
+            return "User deleted successfully";
+        } catch (Exception e) {
+            return "Database Error";
+        }
     }
 }
