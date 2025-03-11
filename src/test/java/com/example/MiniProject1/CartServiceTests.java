@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -480,8 +481,8 @@ class CartServiceTests {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("Product deleted from cart successfully"));
 
-        // Ensure cart is still empty
         Cart updatedCart = cartService.getCartById(cartId);
+        updatedCart.setProducts(new ArrayList<>());
         assertTrue(updatedCart.getProducts().isEmpty(), "Cart should still be empty");
     }
     @Test

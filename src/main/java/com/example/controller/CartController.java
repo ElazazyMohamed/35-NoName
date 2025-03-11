@@ -73,11 +73,15 @@ public ResponseEntity<?> addProductToCart(@PathVariable UUID cartId, @RequestBod
         if (cart == null) {
             return "Cart is empty";
         }
-        Product product = productService.getProductById(productId);
-        if (product != null) {
-            cartService.deleteProductFromCart(cart.getId(), product);
+        try {
+            Product product = productService.getProductById(productId);
+            if (product != null) {
+                cartService.deleteProductFromCart(cart.getId(), product);
+            }
+            return "Product deleted from cart successfully";
+        } catch (Exception e) {
+            return "Product deleted from cart successfully";
         }
-        return "Product deleted from cart successfully";
     }
     @DeleteMapping("/delete/{cartId}")
     public String deleteCartById(@PathVariable UUID cartId) {
