@@ -14,7 +14,7 @@ import java.util.UUID;
 public class CartRepository extends MainRepository<Cart> {
 
     @Value("${spring.data.SPRING_DATA_CART}")
-    private static final String DATA_PATH = "src/main/java/com/example/data/carts.json";
+    private String DATA_PATH = "src/main/java/com/example/data/carts.json";
 
     @Override
     protected String getDataPath() {

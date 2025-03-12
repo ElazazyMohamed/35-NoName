@@ -10,7 +10,7 @@ import java.util.UUID;
 @SuppressWarnings("rawtypes")
 public class ProductRepository extends MainRepository<Product> {
     @Value("${spring.data.SPRING_DATA_PRODUCT}")
-    private static final String DATA_PATH = "src/main/java/com/example/data/products.json";
+    private String DATA_PATH = "src/main/java/com/example/data/products.json";
 
     public ProductRepository() {
 
