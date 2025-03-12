@@ -15,7 +15,7 @@ import java.util.UUID;
 @SuppressWarnings("rawtypes")
 public class UserRepository extends MainRepository<User> {
     @Value("${spring.data.SPRING_DATA_USER}")
-    private static final String DATA_PATH = "src/main/java/com/example/data/users.json";
+    private String DATA_PATH = "src/main/java/com/example/data/users.json";
 
     public UserRepository() {
 
